@@ -12,7 +12,7 @@ class RPSGame
     @record = []
     @human_choices = []
   end
-  
+
   def clear_screen
     system('clear') || system('cls')
   end
@@ -33,7 +33,7 @@ class RPSGame
 
   def display_winner
     if human.move > computer.move
-      human_choices << (human.move).to_s
+      human_choices << human.move.to_s
       human.increase_score
       puts "#{human.name} Won the Round! You have #{human.score} points."
     elsif computer.move > human.move
@@ -43,12 +43,12 @@ class RPSGame
       puts "It's a Tie!"
     end
   end
-  
+
   def display_record
     puts "Would you like to see the match record (y/n)?"
     choice = gets.chomp.downcase
     return unless choice == 'y'
-    record.each_with_index do |round, index|
+    record.each_with_index do |_round, index|
       puts "Round #{index + 1}: #{human.name} chose #{record[index][1]}, " \
            "#{computer.name} chose #{record[index][3]}."
     end
@@ -62,7 +62,7 @@ class RPSGame
       clear_screen
       break if ['y', 'n'].include? choice
       puts "Invalid Answer."
-  end
+    end
 
     return if choice == 'n'
     human.choose
@@ -80,9 +80,9 @@ class RPSGame
 
   def game_over?
     if human.score == 10
-      return "#{human.name} earned 10 points first! You Won the Game!"
+      "#{human.name} earned 10 points first! You Won the Game!"
     elsif computer.score == 10
-      return "#{computer.name} earned 10 points first! They Won the Game!"
+      "#{computer.name} earned 10 points first! They Won the Game!"
     end
   end
 
@@ -146,7 +146,6 @@ class Player
 end
 
 class Human < Player
-  
   def initialize
     set_name
     self.score = 0
@@ -166,7 +165,7 @@ class Human < Player
   def choose
     choice = nil
     loop do
-      puts "#{self.name}, please choose Rock, Paper, Scissors, Lizard, or Spock"
+      puts "#{name}, please choose Rock, Paper, Scissors, Lizard, or Spock"
       choice = gets.chomp.downcase
       display_record if choice == 'record'
       break if Move::VALUES.include? choice
@@ -177,7 +176,6 @@ class Human < Player
 end
 
 class Computer < Player
-  
   def initialize
     set_name
     self.score = 0
@@ -201,11 +199,10 @@ class Computer < Player
       self.move = Move.new(Move::VALUES.sample)
     end
   end
-  
+
   def adapt
     self.move = Move.new(Move::VALUES.sample)
-  end  
+  end
 end
 
 RPSGame.new.play
-
